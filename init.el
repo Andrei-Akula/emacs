@@ -209,6 +209,10 @@
   (when (eq system-type 'darwin)
     (set-face-attribute 'default nil :font "Menlo-12")
     (set-face-attribute 'variable-pitch nil :font "PT Mono-12"))
+  
+  ;;; Font on Windows
+  (when (memq system-type '(windows-nt ms-dos))
+    (set-face-attribute 'default nil :font "Consolas-10"))
 
   ;; Icons
   (let ((installed (package-installed-p 'all-the-icons)))
