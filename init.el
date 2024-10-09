@@ -215,13 +215,14 @@
     (set-face-attribute 'default nil :font "Consolas-10"))
 
   ;; Icons
-  (let ((installed (package-installed-p 'all-the-icons)))
-    (use-package all-the-icons)
-    (unless installed (all-the-icons-install-fonts)))
-  ;; Icons in dired
-  (use-package all-the-icons-dired
-    :after all-the-icons
-    :hook (dired-mode . all-the-icons-dired-mode))
+  (unless (memq system-type '(windows-nt ms-dos))
+    (let ((installed (package-installed-p 'all-the-icons)))
+      (use-package all-the-icons)
+      (unless installed (all-the-icons-install-fonts)))
+    ;; Icons in dired
+    (use-package all-the-icons-dired
+      :after all-the-icons
+      :hook (dired-mode . all-the-icons-dired-mode)))
 
   ;; Themes
   (setq custom-safe-themes t)
