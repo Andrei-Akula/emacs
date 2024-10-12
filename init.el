@@ -158,6 +158,17 @@
 ;; Text manipulation
 (setq-default fill-column 135)
 
+(use-package expand-region
+  :bind (("C-c <right>" . er/expand-region)))
+
+;; avy is a GNU Emacs package for jumping to visible text using a char-based decision tree
+(use-package avy
+  :bind (("M-g l" . #'avy-goto-line)
+         ("C-c ;" . #'avy-goto-line)
+         ("C-c j j" . #'avy-goto-line)
+         ("C-c :" . #'avy-goto-char)
+         ("C-c '" . #'avy-goto-char-2)
+         ("M-g w" . #'avy-goto-word-1)))
 
 ;; Spelling
 (setq ispell-program-name "/opt/homebrew/bin/ispell")
