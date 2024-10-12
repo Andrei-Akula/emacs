@@ -172,7 +172,8 @@
 ;; Spelling
 (when (eq system-type 'darwin)
   (setq ispell-program-name "/opt/homebrew/bin/ispell"))
-
+(when (memq system-type '(windows-nt ms-dos))
+  (setq ispell-program-name "D:/Program Files/hunspell-1.3.2-3-w32/bin/hunspell.exe"))
 
 ;; IDO
 (require 'ido)
