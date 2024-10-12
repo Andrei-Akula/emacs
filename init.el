@@ -164,10 +164,9 @@
 ;; avy is a GNU Emacs package for jumping to visible text using a char-based decision tree
 (use-package avy
   :bind (("M-g l" . #'avy-goto-line)
-         ("C-c ;" . #'avy-goto-line)
          ("C-c j j" . #'avy-goto-line)
-         ("C-c :" . #'avy-goto-char)
-         ("C-c '" . #'avy-goto-char-2)
+         ("M-g c" . #'avy-goto-char)
+         ("M-g b" . #'avy-goto-char-2)
          ("M-g w" . #'avy-goto-word-1)))
 
 ;; Spelling
