@@ -226,6 +226,18 @@
 
   ;; Themes
   (setq custom-safe-themes t)
+  
+	;;;; modus-operandi theme
+  (require-theme 'modus-themes)
+
+  ;; All customizations here
+  ;;
+
+  ;; Load the theme of choice (built-in themes are always "safe" so they
+  ;; do not need the `no-require' argument of `load-theme').
+  (load-theme 'modus-operandi)
+
+  (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
   )
 
 
