@@ -159,7 +159,7 @@
 (setq-default fill-column 135)
 
 (use-package expand-region
-  :bind (("C-c <right>" . er/expand-region)))
+  :bind (("C-=" . er/expand-region)))
 
 ;; avy is a GNU Emacs package for jumping to visible text using a char-based decision tree
 (use-package avy
@@ -170,7 +170,8 @@
          ("M-g w" . #'avy-goto-word-1)))
 
 ;; Spelling
-(setq ispell-program-name "/opt/homebrew/bin/ispell")
+(when (eq system-type 'darwin)
+  (setq ispell-program-name "/opt/homebrew/bin/ispell"))
 
 
 ;; IDO
@@ -220,7 +221,7 @@
   (when (eq system-type 'darwin)
     (set-face-attribute 'default nil :font "Menlo-12")
     (set-face-attribute 'variable-pitch nil :font "PT Mono-12"))
-  
+
   ;;; Font on Windows
   (when (memq system-type '(windows-nt ms-dos))
     (set-face-attribute 'default nil :font "Consolas-10"))
@@ -237,7 +238,7 @@
 
   ;; Themes
   (setq custom-safe-themes t)
-  
+
 	;;;; modus-operandi theme
   (require-theme 'modus-themes)
 
