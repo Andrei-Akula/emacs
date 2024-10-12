@@ -40,7 +40,7 @@
 ;; MacOS
 (when (eq system-type 'darwin)
   ;; Standard macOS conventions would have s-w close the current buffer, not the whole window.
-  (bind-key "s-w" #'kill-this-buffer)
+  (bind-key "s-w" #'kill-current-buffer)
   ;;(setq ns-auto-hide-menu-bar t)
   )
 
@@ -183,6 +183,7 @@
 (require 'bs)
 (global-set-key (kbd "C-x C-b") 'bs-show)
 
+(bind-key "C-x K" #'kill-current-buffer)
 
 ;; auto-refresh buffer if file hase changed
 ;;(global-auto-revert-mode t)
