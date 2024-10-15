@@ -240,17 +240,19 @@
   ;; Themes
   (setq custom-safe-themes t)
 
-	;;;; modus-operandi theme
-  (require-theme 'modus-themes)
-
-  ;; All customizations here
-  ;;
-
-  ;; Load the theme of choice (built-in themes are always "safe" so they
-  ;; do not need the `no-require' argument of `load-theme').
-  (load-theme 'modus-operandi)
-
-  (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+  (use-package ef-themes
+    :ensure t
+    :config
+    ;; Add all your customizations prior to loading the themes
+    (setq ef-themes-to-toggle '(ef-light ef-owl))
+  
+    ;; Disable all other themes to avoid awkward blending:
+    (mapc #'disable-theme custom-enabled-themes)
+  
+    ;; Load the theme of choice:
+    (load-theme 'ef-light :no-confirm)
+  
+    (define-key global-map (kbd "<f5>") #'ef-themes-toggle))
   )
 
 
