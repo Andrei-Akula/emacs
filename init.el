@@ -130,9 +130,11 @@
 ;; start typing, the selected text will be automatically deleted and replaced with the newly typed text. This also deactivates the
 ;; mark.
 (delete-selection-mode t)
-(global-display-line-numbers-mode t)
 (column-number-mode)
 (savehist-mode)
+
+;; use display-line-numbers-mode only in prog mode
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 ;; treatment of whitespace
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
