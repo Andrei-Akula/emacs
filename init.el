@@ -212,6 +212,7 @@
  dired-do-revert-buffer t
  ;; Sensible mark behavior
  dired-mark-region t
+ dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso"
  )
 
 ;;
