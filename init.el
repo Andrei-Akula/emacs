@@ -36,8 +36,9 @@
 ;; Increases the maximum depth of evaluation for Lisp expressions, which can prevent errors in deeply nested expressions.
 (setq max-lisp-eval-depth 2000)
 
-
+;;
 ;; MacOS
+;;
 (when (eq system-type 'darwin)
   ;; Standard macOS conventions would have s-w close the current buffer, not the whole window.
   (bind-key "s-w" #'kill-current-buffer)
@@ -50,8 +51,9 @@
  auto-save-default nil
  create-lockfiles nil)
 
-
+;;
 ;; Fixing Emacs’s defaults
+;;
 (setq
  ;; No need to see GNU agitprop.
  inhibit-startup-screen t
@@ -171,13 +173,17 @@
          ("M-g b" . #'avy-goto-char-2)
          ("M-g w" . #'avy-goto-word-1)))
 
+;;
 ;; Spelling
+;;
 (when (eq system-type 'darwin)
   (setq ispell-program-name "/opt/homebrew/bin/ispell"))
 (when (memq system-type '(windows-nt ms-dos))
   (setq ispell-program-name "D:/Program Files/hunspell-1.3.2-3-w32/bin/hunspell.exe"))
 
+;;
 ;; IDO
+;;
 (require 'ido)
 (ido-mode t)
 (setq ido-enable-flex-matching t)
@@ -192,7 +198,9 @@
 ;; auto-refresh buffer if file hase changed
 ;;(global-auto-revert-mode t)
 
+;;
 ;; Dired
+;;
 (setq
   ;; Why wouldn't you create destination directories when copying files, Emacs?
  dired-create-destination-dirs 'ask
@@ -206,7 +214,9 @@
  dired-mark-region t
  )
 
+;;
 ;; Visuals
+;;
 (when (display-graphic-p)
   ;; Start window size
   (set-frame-size (selected-frame) 160 46)
@@ -239,6 +249,7 @@
       :after all-the-icons
       :hook (dired-mode . all-the-icons-dired-mode)))
 
+  ;;
   ;; Themes
   (setq custom-safe-themes t)
 
@@ -258,8 +269,9 @@
   )
 
 
-
+;;
 ;; Org mode
+;;
 (when (display-graphic-p)
   (require 'org)
   (define-key global-map "\C-cl" 'org-store-link)
@@ -279,9 +291,44 @@
   (require 'reverse-im)
   (reverse-im-activate "russian-computer"))
 
+;;
+;; Programming languages
+;;
+(setq-default tab-width 2)
+(setq-default c-basic-offset 2)
+(setq-default js-indent-level 2)
+(setq-default js-switch-indent-offset 2)
 
+(when (display-graphic-p)
+  (use-package typescript-mode
+    :custom (typescript-indent-level 2))
 
+  (use-package js2-mode
+    :hook (js2-mode . js2-imenu-extras-mode)
+    :mode ("\\.js$" . js2-mode)
+    :ensure t
+    :custom
+    (js2-mode-assume-strict t)
+    (js2-warn-about-unused-function-arguments t)
+    )
+
+  (use-package xref-js2
+    :ensure t
+    :hook (js2-mode . pt/js-hook)
+    :custom
+    (xref-js2-search-program 'rg)
+    :config
+    (defun pt/js-hook ()
+      (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+
+  (use-package web-mode
+    :custom (web-mode-markup-indent-offset 2))
+
+  )
+
+;;
 ;; Recent files
+;;
 (require 'recentf)
 
 (defun ido-recentf-open ()
@@ -298,7 +345,9 @@
 ;; 50 files ought to be enough.
 (setq recentf-max-saved-items 50)
 
-
+;;
+;; custom-set-variables
+;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
