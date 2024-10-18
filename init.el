@@ -215,6 +215,10 @@
  dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso"
  )
 
+;; MacOS ls doesn't know --group-directories-first --time-style=long-iso
+(when (eq system-type 'darwin)
+  (setq dired-listing-switches "-AGFhlv"))
+
 ;;
 ;; Visuals
 ;;
