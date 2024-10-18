@@ -213,6 +213,9 @@
  ;; Sensible mark behavior
  dired-mark-region t
  dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso"
+ ;; when two Dired buffers are open side-by-side we get the other
+ ;; buffer as the default target of the current rename or copy operation
+ dired-dwim-target t
  )
 
 ;; MacOS ls doesn't know --group-directories-first --time-style=long-iso
