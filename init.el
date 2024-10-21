@@ -314,7 +314,9 @@
 
   (use-package js2-mode
     :hook (js2-mode . js2-imenu-extras-mode)
+    :hook (js-mode-hook . js2-minor-mode)
     :mode ("\\.js$" . js2-mode)
+    :interpreter ("node" . js2-mode)
     :ensure t
     :custom
     (js2-mode-assume-strict t)
