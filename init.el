@@ -15,6 +15,7 @@
 (package-initialize)
 
 ;; use-package to simplify the config file - https://github.com/jwiegley/use-package
+;; you can use M-x describe-personal-keybindings to see all such keybindings you've set throughout your .emacs file
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -160,7 +161,7 @@
 
 
 ;; Text manipulation
-(setq-default fill-column 135)
+(setq-default fill-column 120 )
 
 (use-package expand-region
   :bind (("C-=" . er/expand-region)))
