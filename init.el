@@ -203,16 +203,15 @@
 ;; Dired
 ;;
 (setq
-  ;; Why wouldn't you create destination directories when copying files, Emacs?
+ ;; Whether Dired should create destination dirs when copying/removing files.
  dired-create-destination-dirs 'ask
- ;; Before the existence of this option, you had to either hack
- ;; dired commands or use the dired+ library, the maintainer
- ;; of which refuses to use a VCS. So fuck him.
+ ;; If non-nil, kill the current buffer when selecting a new directory.
  dired-kill-when-opening-new-dired-buffer t
- ;; Update directory listings automatically (again, why isn't this default?)
+ ;; This option controls whether to refresh the directory listing in a Dired buffer that is the destination of one of
+ ;; these operations: ‘dired-do-copy’, ‘dired-do-rename’, ‘dired-do-symlink’, ‘dired-do-hardlink’.
  dired-do-revert-buffer t
  ;; Sensible mark behavior
- dired-mark-region t
+ dired-mark-region 'file
  dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso"
  ;; when two Dired buffers are open side-by-side we get the other
  ;; buffer as the default target of the current rename or copy operation
