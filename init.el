@@ -143,6 +143,17 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (setq require-final-newline t)
 
+;;
+;; Isearch
+;;
+(use-package isearch
+  :ensure nil
+  :demand t
+  :config
+  (setq search-whitespace-regexp ".*?" ; one `setq' here to make it obvious they are a bundle
+        isearch-lax-whitespace t       ; M-s SPC toggle lax-whitespace searching
+        isearch-regexp-lax-whitespace nil))
+
 
 (defun pt/indent-just-yanked ()
   "Re-indent whatever you just yanked appropriately."
