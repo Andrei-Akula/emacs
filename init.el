@@ -233,6 +233,27 @@
 (when (eq system-type 'darwin)
   (setq dired-listing-switches "-AGFhlv"))
 
+
+;;;; auto-refresh buffer if file hase changed
+;;;; Auto revert mode
+(use-package autorevert
+  :ensure nil
+  :hook (after-init . global-auto-revert-mode)
+  :config
+  (setq auto-revert-verbose t))
+
+
+;; VC
+(use-package vc
+  :ensure nil
+  :bind
+  (
+   :map global-map
+   ("C-x v ." . vc-dir-root) ; `vc-dir-root' is from Emacs 28
+   ("C-x v <return>" . vc-dir-root)))
+
+
+
 ;;
 ;; Visuals
 ;;
