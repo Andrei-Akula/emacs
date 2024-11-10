@@ -224,13 +224,8 @@
                 next-screen-context-lines 0))
 
 
-;;;; recentf
-(defun ido-recentf-open ()
-  "Use `ido-completing-read' to find a recent file."
-  (interactive)
-  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-    (message "Opening file...")
-    (message "Aborting")))
+;; This package maintains a list of recently opened files and makes it easy to visit them.  The
+;; recent files list is automatically saved across Emacs sessions.
 
 (use-package recentf
   :ensure nil
@@ -712,6 +707,14 @@
     (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)))
 
 
+;;;; recentf
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to find a recent file."
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+    (message "Opening file...")
+    (message "Aborting")))
+
 ;; use IDO in console
 (unless (display-graphic-p)
   (require 'ido)
@@ -719,6 +722,26 @@
   (ido-everywhere 1)
   (setq ido-enable-flex-matching t)
   (global-set-key (kbd "C-x C-r") 'ido-recentf-open))
+
+
+
+;; The marginalia package, co-authored by Daniel Mendler and Omar Antolín Camarena, provides helpful
+;; annotations to the side of completion candidates.  Annotations are provided on a per-category
+;; basis. Categories are metadata associated with the completion table, which describe what the
+;; candidates are about.
+
+;;; Detailed completion annotations (marginalia.el)
+(use-package marginalia
+  :ensure t
+  :if (display-graphic-p)
+  :hook (after-init . marginalia-mode)
+  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+  ;; available in the *Completions* buffer, add it to the
+  ;; `completion-list-mode-map'.
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  :config
+  (setq marginalia-max-relative-age 0)) ; absolute time
 
 
 
