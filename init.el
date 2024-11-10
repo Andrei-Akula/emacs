@@ -1,4 +1,5 @@
 ;; -*- coding: utf-8; lexical-binding: t -*-
+;; Mostly based on Protesilaos' configuration https://protesilaos.com/emacs/dotemacs
 
 (set-language-environment "UTF-8")
 (prefer-coding-system 'utf-8)
@@ -243,7 +244,7 @@
   ;; (setq recentf-initialize-file-name-history nil)
   ;; (setq recentf-filename-handlers nil)
   ;; (setq recentf-show-file-shortcuts-flag nil)
-  :bind ("C-x C-r" . ido-recentf-open))
+  :bind ("C-x C-r" . recentf-open))
 
 
 ;; Bookmarks are compartments that store arbitrary information about a file or buffer. The records
@@ -319,6 +320,7 @@
 ;;;; Tooltips (tooltip-mode)
 (use-package tooltip
   :ensure nil
+  :if (display-graphic-p)
   :hook (after-init . tooltip-mode)
   :config
   (setq tooltip-delay 0.5
@@ -422,6 +424,7 @@
 ;;; Shell (M-x shell)
 (use-package shell
   :ensure nil
+  :if (display-graphic-p)
   :bind
   ( ;; :map global-map
     ;; ("<f1>" . shell)
@@ -640,6 +643,7 @@
 
 (use-package corfu
   :ensure t
+  :if (display-graphic-p)
   :hook (after-init . global-corfu-mode)
   ;; I also have (setq tab-always-indent 'complete) for TAB to complete
   ;; when it does not need to perform an indentation change.
@@ -683,6 +687,39 @@
   ;; commands are hidden, since they are not used via M-x. This setting is
   ;; useful beyond Corfu.
   (read-extended-command-predicate #'command-completion-default-include-p))
+
+
+
+;; The vertico package by Daniel Mendler displays the minibuffer in a vertical layout. Under the
+;; hood, it takes care to be responsive and to handle even massive completion tables gracefully.
+
+;;; Vertical completion layout (vertico)
+(use-package vertico
+  :ensure t
+  :if (display-graphic-p)
+  :hook (after-init . vertico-mode)
+  :config
+  (setq vertico-scroll-margin 0)
+  (setq vertico-count 10)
+  (setq vertico-resize t)
+  (setq vertico-cycle t)
+
+  (with-eval-after-load 'rfn-eshadow
+    ;; This works with `file-name-shadow-mode' enabled.  When you are in
+    ;; a sub-directory and use, say, `find-file' to go to your home '~/'
+    ;; or root '/' directory, Vertico will clear the old path to keep
+    ;; only your current input.
+    (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)))
+
+
+;; use IDO in console
+(unless (display-graphic-p)
+  (require 'ido)
+  (ido-mode t)
+  (ido-everywhere 1)
+  (setq ido-enable-flex-matching t)
+  (global-set-key (kbd "C-x C-r") 'ido-recentf-open))
+
 
 
 
@@ -745,11 +782,7 @@
   (setq ispell-program-name "D:/Program Files/hunspell-1.3.2-3-w32/bin/hunspell.exe"))
 
 
-;; IDO
-(require 'ido)
-(ido-mode t)
-(ido-everywhere 1)
-(setq ido-enable-flex-matching t)
+
 
 
 ;; bs-show: 'a' toggles all buffers, and '+' then marks an entry to display in both views
