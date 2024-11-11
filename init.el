@@ -833,6 +833,9 @@
  dired-dwim-target t
  )
 
+(when (eq system-type 'darwin)
+    (setq dired-listing-switches "-AGFhlv"))
+
 ;; Visuals
 (when (display-graphic-p)
   ;; Icons
