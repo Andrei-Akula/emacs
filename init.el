@@ -744,9 +744,30 @@
   (setq marginalia-max-relative-age 0)) ; absolute time
 
 
+;;
+;; Isearch
+;;
+;; https://protesilaos.com/emacs/dotemacs#h:e0f9c30e-3a98-4479-b709-7008277749e4
+;; https://protesilaos.com/codelog/2023-06-10-emacs-search-replace-basics/
+;;
+(use-package isearch
+  :ensure nil
+  :demand t
+  :config
+  ;; isearch lax space
+  (setq search-whitespace-regexp ".*?" ; one `setq' here to make it obvious they are a bundle
+        isearch-lax-whitespace t       ; M-s SPC toggle lax-whitespace searching
+        isearch-regexp-lax-whitespace nil)
+  ;; match counter shows the position of the current match relative to the total count (like 5/20)
+  (setq isearch-lazy-count t)
+  (setq lazy-count-prefix-format "(%s/%s) ")
+  (setq lazy-count-suffix-format nil)
+  ;; when we are repeating an isearch in the opposite direction move directly to the next/previous match
+  (setq isearch-repeat-on-direction-change t)
+  ;; tweaks for the occur buffer
+  (setq list-matching-lines-jump-to-current-line nil) ; do not jump to current line in `*occur*' buffers
+  (add-hook 'occur-mode-hook #'hl-line-mode))
 
-
-;; *** end of refactoring ***
 
 ;;; grep and xref
 (use-package re-builder
@@ -804,6 +825,7 @@
 
 
 
+;; *** end of refactoring ***
 
 
 
@@ -820,17 +842,6 @@
 
 ;; treatment of whitespace
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
-
-;;
-;; Isearch
-;;
-(use-package isearch
-  :ensure nil
-  :demand t
-  :config
-  (setq search-whitespace-regexp ".*?" ; one `setq' here to make it obvious they are a bundle
-        isearch-lax-whitespace t       ; M-s SPC toggle lax-whitespace searching
-        isearch-regexp-lax-whitespace nil))
 
 
 (defun pt/indent-just-yanked ()
