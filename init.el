@@ -748,6 +748,64 @@
 
 ;; *** end of refactoring ***
 
+;;; grep and xref
+(use-package re-builder
+  :ensure nil
+  :commands (re-builder regexp-builder)
+  :config
+  (setq reb-re-syntax 'read))
+
+(use-package xref
+  :ensure nil
+  :commands (xref-find-definitions xref-go-back)
+  :config
+  ;; All those have been changed for Emacs 28
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read) ; for M-.
+  (setq xref-show-xrefs-function #'xref-show-definitions-buffer) ; for grep and the like
+  (setq xref-file-name-display 'project-relative))
+
+(use-package grep
+  :ensure nil
+  :commands (grep lgrep rgrep)
+  :config
+  (setq grep-save-buffers nil)
+  ;; (setq grep-use-headings t) ; Emacs 30
+
+  (let ((executable (or (executable-find "rg") "grep"))
+        (rgp (string-match-p "rg" grep-program)))
+    (setq grep-program executable)
+    (setq grep-template
+          (if rgp
+              "/usr/bin/rg -nH --null -e <R> <F>"
+            "/usr/bin/grep <X> <C> -nH --null -e <R> <F>"))
+    (setq xref-search-program (if rgp 'ripgrep 'grep))))
+
+
+;;; wgrep (writable grep)
+;; See the `grep-edit-mode' for the new built-in feature.
+(unless (>= emacs-major-version 31)
+  (use-package wgrep
+    :ensure t
+    :after grep
+    :bind
+    ( :map grep-mode-map
+      ("e" . wgrep-change-to-wgrep-mode)
+      ("C-x C-q" . wgrep-change-to-wgrep-mode)
+      ("C-c C-c" . wgrep-finish-edit))
+    :config
+    (setq wgrep-auto-save-buffer t)
+    (setq wgrep-change-readonly-file t)))
+
+
+;;;; Handle performance for very long lines (so-long.el)
+(use-package so-long
+  :ensure nil
+  :hook (after-init . global-so-long-mode))
+
+
+
+
+
 
 ;; Never mix tabs and spaces. Never use tabs, period.
 ;; We need the setq-default here because this becomes a buffer-local variable when set.
