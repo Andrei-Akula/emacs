@@ -826,6 +826,34 @@
 
 
 
+
+;;
+;; Programming languages
+;;
+(setq-default tab-width 2)
+(setq-default c-basic-offset 2)
+(setq-default js-indent-level 2)
+(setq-default js-switch-indent-offset 2)
+
+
+;;;; eglot
+
+;; npm install -g typescript-language-server typescript
+;; npm i -g vscode-langservers-extracted
+
+;; add it to PATH var, e.g. export PATH=$PATH:/Users/Andrei_Akula/.nvm/versions/node/v20.12.0/bin/
+
+;;;; Eglot (built-in client for the language server protocol)
+(use-package eglot
+  :ensure nil
+  :functions (eglot-ensure)
+  :commands (eglot)
+  :config
+  (setq eglot-sync-connect nil)
+  (setq eglot-autoshutdown t))
+
+
+
 ;; *** end of refactoring ***
 
 
@@ -946,42 +974,37 @@
   (reverse-im-activate "russian-computer"))
 
 
-;;
-;; Programming languages
-;;
-(setq-default tab-width 2)
-(setq-default c-basic-offset 2)
-(setq-default js-indent-level 2)
-(setq-default js-switch-indent-offset 2)
 
-(when (display-graphic-p)
-  (use-package typescript-mode
-    :custom (typescript-indent-level 2))
+;; (when (display-graphic-p)
+;;   (use-package typescript-mode
+;;     :custom (typescript-indent-level 2))
 
-  (use-package js2-mode
-    :hook (js2-mode . js2-imenu-extras-mode)
-    :hook (js-mode-hook . js2-minor-mode)
-    :mode ("\\.js$" . js2-mode)
-    :interpreter ("node" . js2-mode)
-    :ensure t
-    :custom
-    (js2-mode-assume-strict t)
-    (js2-warn-about-unused-function-arguments t)
-    )
+;;   (use-package js2-mode
+;;     :hook (js2-mode . js2-imenu-extras-mode)
+;;     :hook (js-mode-hook . js2-minor-mode)
+;;     ;; :mode ("\\.js$" . js2-mode)
+;;     :interpreter ("node" . js2-mode)
+;;     :ensure t
+;;     :custom
+;;     (js2-mode-assume-strict t)
+;;     (js2-warn-about-unused-function-arguments t)
+;;     (js2-dynamic-idle-timer-adjust 5000)
+;;     )
 
-  (use-package xref-js2
-    :ensure t
-    :hook (js2-mode . pt/js-hook)
-    :custom
-    (xref-js2-search-program 'rg)
-    :config
-    (defun pt/js-hook ()
-      (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+;;   (use-package xref-js2
+;;     :ensure t
+;;     :hook (js2-mode . pt/js-hook)
+;;     :custom
+;;     (xref-js2-search-program 'rg)
+;;     :config
+;;     (defun pt/js-hook ()
+;;       (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
-  (use-package web-mode
-    :custom (web-mode-markup-indent-offset 2))
+;;   (use-package web-mode
+;;     :custom (web-mode-markup-indent-offset 2))
 
-  )
+;;   )
+
 
 
 ;;
