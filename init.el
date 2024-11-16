@@ -898,6 +898,47 @@
   )
 
 
+;;; General window and buffer configurations
+(use-package uniquify
+  :ensure nil
+  :config
+  ;;;; `uniquify' (unique names for buffers)
+  ;; forward style, which is the closest to the actual file name.
+  (setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-strip-common-suffix t)
+  (setq uniquify-after-kill-buffer-p t))
+
+
+;;;; Line highlight
+(use-package hl-line
+  :ensure nil
+  :commands (hl-line-mode)
+  :config
+  ;; The nil value for hl-line-sticky-flag makes the line highlight not show up in unfocused windows.
+  (setq hl-line-sticky-flag nil))
+
+
+
+;;; Line numbers on the side of the window
+(use-package display-line-numbers
+  :ensure nil
+  ;; use display-line-numbers-mode only in prog mode
+  :hook (prog-mode . display-line-numbers-mode)
+  ;; :bind
+  ;; ("<f7>" . display-line-numbers-mode)
+  :config
+  (column-number-mode)
+  (setq-default display-line-numbers-type t)
+  ;; Those two variables were introduced in Emacs 27.1
+  (setq display-line-numbers-major-tick 0)
+  (setq display-line-numbers-minor-tick 0)
+  ;; Use absolute numbers in narrowed buffers
+  (setq-default display-line-numbers-widen t))
+
+;;(global-display-line-numbers-mode t)
+
+
+
 ;;
 ;; Programming languages
 ;;
