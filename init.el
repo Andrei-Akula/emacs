@@ -918,22 +918,21 @@
   (setq hl-line-sticky-flag nil))
 
 
-
 ;;; Line numbers on the side of the window
 (use-package display-line-numbers
   :ensure nil
-  ;; use display-line-numbers-mode only in prog mode
-  :hook (prog-mode . display-line-numbers-mode)
   ;; :bind
   ;; ("<f7>" . display-line-numbers-mode)
   :config
-  (column-number-mode)
   (setq-default display-line-numbers-type t)
   ;; Those two variables were introduced in Emacs 27.1
   (setq display-line-numbers-major-tick 0)
   (setq display-line-numbers-minor-tick 0)
   ;; Use absolute numbers in narrowed buffers
-  (setq-default display-line-numbers-widen t))
+  (setq-default display-line-numbers-widen t)
+  (column-number-mode)
+  ;; use display-line-numbers-mode only in prog mode
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
 
 ;;(global-display-line-numbers-mode t)
 
