@@ -825,6 +825,77 @@
   :hook (after-init . global-so-long-mode))
 
 
+;;;;
+;;;; Dired
+;;;;
+
+;;; Dired file manager
+(use-package dired
+  :ensure nil
+  :commands (dired)
+  :config
+  (setq dired-kill-when-opening-new-dired-buffer t)
+  (setq dired-recursive-copies 'always)
+  (setq dired-recursive-deletes 'always)
+  (setq delete-by-moving-to-trash t)
+  (setq dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso")
+  ;; when two Dired buffers are open side-by-side we get the other
+  ;; buffer as the default target of the current rename or copy operation
+  (setq dired-dwim-target t)
+  (setq dired-auto-revert-buffer #'dired-directory-changed-p) ; also see `dired-do-revert-buffer'
+  (setq dired-make-directory-clickable t) ; Emacs 29.1
+  ;; (setq dired-free-space nil) ; Emacs 29.1
+  (setq dired-mouse-drag-files t) ; Emacs 29.1
+  (setq dired-mark-region t))
+
+(use-package dired-aux
+  :ensure nil
+  :after dired
+  :bind
+  ( :map dired-mode-map
+    ("C-+" . dired-create-empty-file)
+    ;; ("M-s f" . nil)
+    )
+  :config
+  (setq dired-isearch-filenames 'dwim)
+  (setq dired-create-destination-dirs 'ask) ; Emacs 27
+  (setq dired-vc-rename-file t)             ; Emacs 27
+  (setq dired-do-revert-buffer (lambda (dir) (not (file-remote-p dir)))) ; Emacs 28
+  (setq dired-create-destination-dirs-on-trailing-dirsep t)) ; Emacs 29
+
+(use-package dired-x
+  :ensure nil
+  :after dired
+  :bind
+  ( :map dired-mode-map
+    ("I" . dired-info))
+  :config
+  (setq dired-clean-up-buffers-too t)
+  (setq dired-clean-confirm-killing-deleted-buffers t)
+  (setq dired-x-hands-off-my-keys t)    ; easier to show the keys I use
+  (setq dired-bind-man nil)
+  (setq dired-bind-info nil))
+
+
+
+(when (eq system-type 'darwin)
+    (setq dired-listing-switches "-AGFhlv"))
+
+;; Visuals
+(when (display-graphic-p)
+  ;; Icons
+  (unless (memq system-type '(windows-nt ms-dos))
+    (let ((installed (package-installed-p 'all-the-icons)))
+      (use-package all-the-icons
+        :ensure t)
+      (unless installed (all-the-icons-install-fonts)))
+    ;; Icons in dired
+    (use-package all-the-icons-dired
+      :ensure t
+      :after all-the-icons
+      :hook (dired-mode . all-the-icons-dired-mode)))
+
+  )
 
 
 ;;
@@ -909,46 +980,6 @@
 ;; bs-show: 'a' toggles all buffers, and '+' then marks an entry to display in both views
 (require 'bs)
 (global-set-key (kbd "C-x C-b") 'bs-show)
-
-
-
-
-;; Dired
-(setq
-  ;; Why wouldn't you create destination directories when copying files, Emacs?
- dired-create-destination-dirs 'ask
- ;; Before the existence of this option, you had to either hack
- ;; dired commands or use the dired+ library, the maintainer
- ;; of which refuses to use a VCS. So fuck him.
- dired-kill-when-opening-new-dired-buffer t
- ;; Update directory listings automatically (again, why isn't this default?)
- dired-do-revert-buffer t
- ;; Sensible mark behavior
- dired-mark-region t
- dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso"
- ;; when two Dired buffers are open side-by-side we get the other
- ;; buffer as the default target of the current rename or copy operation
- dired-dwim-target t
- )
-
-(when (eq system-type 'darwin)
-    (setq dired-listing-switches "-AGFhlv"))
-
-;; Visuals
-(when (display-graphic-p)
-  ;; Icons
-  (unless (memq system-type '(windows-nt ms-dos))
-    (let ((installed (package-installed-p 'all-the-icons)))
-      (use-package all-the-icons
-        :ensure t)
-      (unless installed (all-the-icons-install-fonts)))
-    ;; Icons in dired
-    (use-package all-the-icons-dired
-      :ensure t
-      :after all-the-icons
-      :hook (dired-mode . all-the-icons-dired-mode)))
-
-  )
 
 
 
