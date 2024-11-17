@@ -708,6 +708,39 @@
     (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)))
 
 
+
+;;; Enhanced minibuffer commands (consult.el)
+;;; https://github.com/minad/consult
+(use-package consult
+  :ensure t
+  :if (display-graphic-p)
+  :bind
+  ( :map global-map
+    ("M-s d" . consult-find)
+    ("M-s g" . consult-grep)
+    ("M-s G" . consult-git-grep)
+    ("M-s r" . consult-ripgrep)
+    :map consult-narrow-map
+    ("?" . consult-narrow-help)
+    )
+  :config
+  (setq consult-line-numbers-widen t)
+  ;; (setq completion-in-region-function #'consult-completion-in-region)
+  (setq consult-async-min-input 3)
+  (setq consult-async-input-debounce 0.5)
+  (setq consult-async-input-throttle 0.8)
+  (setq consult-narrow-key nil)
+  ;; (setq consult-find-args
+  ;;       (concat "find . -not ( "
+  ;;               "-path */.git* -prune "
+  ;;               "-or -path */.cache* -prune )"))
+
+  ;; (setq consult-project-function nil) ; always work from the current directory (use `cd' to switch directory)
+
+  ;; (require 'consult-imenu) ; the `imenu' extension is in its own file
+  )
+
+
 ;;;; recentf
 (defun ido-recentf-open ()
   "Use `ido-completing-read' to find a recent file."
