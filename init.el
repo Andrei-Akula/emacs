@@ -991,6 +991,32 @@
 (use-package typescript-mode
     :custom (typescript-indent-level 2))
 
+(use-package js2-mode
+  :if (display-graphic-p)
+  :hook (js2-mode . js2-imenu-extras-mode)
+  :hook (js-mode . js2-minor-mode)
+  :mode ("\\.js$" . js2-mode)
+  :interpreter ("node" . js2-mode)
+  :ensure t
+  :custom
+  (js2-mode-assume-strict t)
+  (js2-warn-about-unused-function-arguments t)
+  (js2-dynamic-idle-timer-adjust 5000))
+
+(use-package xref-js2
+  :if (display-graphic-p)
+  :ensure t
+  :hook (js2-mode . pt/js-hook)
+  :custom
+  (xref-js2-search-program 'rg)
+  :config
+  (defun pt/js-hook ()
+    (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+
+(use-package web-mode
+  :if (display-graphic-p)
+  :custom (web-mode-markup-indent-offset 2))
+
 
 ;;;; eglot
 
@@ -1001,9 +1027,21 @@
 
 ;;;; Eglot (built-in client for the language server protocol)
 (use-package eglot
+  :if (display-graphic-p)
   :ensure nil
   :functions (eglot-ensure)
   :commands (eglot)
+  :hook (
+         (js2-mode . eglot-ensure)
+         (typescript-mode . eglot-ensure))
+  :bind (:map eglot-mode-map
+	      ("C-c l a" . eglot-code-actions)
+	      ("C-c l r" . eglot-rename)
+	      ("C-c l h" . eldoc)
+	      ("C-c l f" . eglot-format)
+	      ("C-c l F" . eglot-format-buffer)
+	      ;; sometimes ionide acts up
+	      ("C-c l R" . eglot-reconnect))
   :config
   (setq eglot-sync-connect nil)
   (setq eglot-autoshutdown t))
