@@ -71,6 +71,14 @@
   ;;(setq ns-auto-hide-menu-bar t)
   )
 
+;; MacOS
+(use-package exec-path-from-shell
+  :ensure t
+  :if (and (display-graphic-p) (eq system-type 'darwin))
+  :init
+  (exec-path-from-shell-initialize))
+
+
 
 (setq
  make-backup-files nil
