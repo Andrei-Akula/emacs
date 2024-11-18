@@ -1057,11 +1057,6 @@
 (setq-default indent-tabs-mode nil)
 
 
-;;(global-display-line-numbers-mode t)
-(column-number-mode)
-
-;; use display-line-numbers-mode only in prog mode
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 ;; treatment of whitespace
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
@@ -1127,37 +1122,6 @@
   (require 'reverse-im)
   (reverse-im-activate "russian-computer"))
 
-
-
-;; (when (display-graphic-p)
-;;   (use-package typescript-mode
-;;     :custom (typescript-indent-level 2))
-
-;;   (use-package js2-mode
-;;     :hook (js2-mode . js2-imenu-extras-mode)
-;;     :hook (js-mode-hook . js2-minor-mode)
-;;     ;; :mode ("\\.js$" . js2-mode)
-;;     :interpreter ("node" . js2-mode)
-;;     :ensure t
-;;     :custom
-;;     (js2-mode-assume-strict t)
-;;     (js2-warn-about-unused-function-arguments t)
-;;     (js2-dynamic-idle-timer-adjust 5000)
-;;     )
-
-;;   (use-package xref-js2
-;;     :ensure t
-;;     :hook (js2-mode . pt/js-hook)
-;;     :custom
-;;     (xref-js2-search-program 'rg)
-;;     :config
-;;     (defun pt/js-hook ()
-;;       (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
-
-;;   (use-package web-mode
-;;     :custom (web-mode-markup-indent-offset 2))
-
-;;   )
 
 
 
