@@ -988,6 +988,9 @@
 (setq-default js-indent-level 2)
 (setq-default js-switch-indent-offset 2)
 
+(use-package typescript-mode
+    :custom (typescript-indent-level 2))
+
 
 ;;;; eglot
 
