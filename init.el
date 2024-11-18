@@ -989,7 +989,8 @@
 (setq-default js-switch-indent-offset 2)
 
 (use-package typescript-mode
-    :custom (typescript-indent-level 2))
+  :ensure t
+  :custom (typescript-indent-level 2))
 
 (use-package js2-mode
   :if (display-graphic-p)
@@ -1014,6 +1015,7 @@
     (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
 (use-package web-mode
+  :ensure t
   :if (display-graphic-p)
   :custom (web-mode-markup-indent-offset 2))
 
