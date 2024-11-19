@@ -887,7 +887,9 @@
   (setq dired-make-directory-clickable t) ; Emacs 29.1
   ;; (setq dired-free-space nil) ; Emacs 29.1
   (setq dired-mouse-drag-files t) ; Emacs 29.1
-  (setq dired-mark-region t))
+  (setq dired-mark-region t)
+
+  (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 
 (use-package dired-aux
   :ensure nil
@@ -909,7 +911,7 @@
   :after dired
   :bind
   ( :map dired-mode-map
-    ("I" . dired-info))
+    ("I" . dired-do-info))
   :config
   (setq dired-clean-up-buffers-too t)
   (setq dired-clean-confirm-killing-deleted-buffers t)
@@ -976,7 +978,30 @@
   ;; Use absolute numbers in narrowed buffers
   (setq-default display-line-numbers-widen t))
 
-;;(global-display-line-numbers-mode t)
+;; (global-display-line-numbers-mode t)
+
+
+
+;;;; `project'
+(use-package project
+  :ensure nil
+  :bind
+  (("C-x p ." . project-dired)
+   ("C-x p C-g" . keyboard-quit)
+   ("C-x p <return>" . project-dired)
+   ("C-x p <delete>" . project-forget-project))
+  :config
+  (setopt project-switch-commands
+          '((project-find-file "Find file")
+            (project-find-regexp "Find regexp")
+            (project-find-dir "Find directory")
+            (project-dired "Root dired")
+            (project-vc-dir "VC-Dir")
+            (project-shell "Shell")
+            (keyboard-quit "Quit")))
+  (setq project-vc-extra-root-markers '(".project")) ; Emacs 29
+  )
+
 
 
 
