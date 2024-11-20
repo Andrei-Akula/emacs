@@ -1020,6 +1020,7 @@
   :bind
   (;; NOTE: I override lots of the defaults
    :map global-map
+   ("C-x v B" . vc-annotate) ; Blame mnemonic
    ("C-x v e" . vc-ediff)
    ("C-x v k" . vc-delete-file) ; 'k' for kill==>delete is more common
    ("C-x v R" . vc-log-search)  ; git log --grep
@@ -1183,7 +1184,8 @@
   :functions (eglot-ensure)
   :commands (eglot)
   :hook (
-         (js2-mode . eglot-ensure)
+         (js-mode . eglot-ensure)
+         ;; (js2-mode . eglot-ensure)
          (typescript-mode . eglot-ensure))
   :bind (:map eglot-mode-map
 	      ("C-c l a" . eglot-code-actions)
