@@ -981,6 +981,18 @@
 ;; (global-display-line-numbers-mode t)
 
 
+;;; Directional window motions (windmove)
+(use-package windmove
+  :ensure nil
+  :bind
+  (:map window-prefix-map ; C-x w
+   ("<up>" . windmove-up)
+   ("<right>" . windmove-right)
+   ("<down>" . windmove-down)
+   ("<left>" . windmove-left))
+  :config
+  (setq windmove-create-window nil)) ; Emacs 27.1
+
 
 ;;;;
 ;;;; projects
