@@ -1283,6 +1283,8 @@ split."
   (setq eglot-sync-connect nil)
   (setq eglot-autoshutdown t))
 
+(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
 
 ;; *** end of refactoring ***
