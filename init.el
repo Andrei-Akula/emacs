@@ -1290,6 +1290,7 @@ split."
 
 
 (use-package breadcrumb
+  :if (display-graphic-p)
   :ensure t
   :functions (prot/breadcrumb-local-mode)
   :hook ((text-mode prog-mode) . prot/breadcrumb-local-mode)
