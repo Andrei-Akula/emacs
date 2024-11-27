@@ -1210,6 +1210,29 @@ split."
   (setq vc-git-log-edit-summary-max-len 70))
 
 
+;;; Interactive and powerful git front-end (Magit)
+(use-package transient
+  :defer t
+  :config
+  (setq transient-show-popup 0.5))
+
+(use-package magit
+  :if (not (eq system-type 'windows-nt))
+  :ensure t
+  :bind ("C-c g" . magit-status)
+  :init
+  (setq magit-define-global-key-bindings nil)
+  (setq magit-section-visibility-indicator '("⮧"))
+  :config
+  (setq git-commit-summary-max-length 50)
+  ;; NOTE 2023-01-24: I used to also include `overlong-summary-line'
+  ;; in this list, but I realised I do not need it.  My summaries are
+  ;; always in check.  When I exceed the limit, it is for a good
+  ;; reason.
+  (setq git-commit-style-convention-checks '(non-empty-second-line))
+
+  (setq magit-diff-refine-hunk t))
+
 
 ;;;; `project'
 (use-package project
