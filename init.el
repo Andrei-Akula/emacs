@@ -834,6 +834,8 @@
   (setq grep-save-buffers nil)
   ;; (setq grep-use-headings t) ; Emacs 30
 
+  (add-to-list 'grep-find-ignored-directories "dist")
+  
   (let ((executable (or (executable-find "rg") "grep"))
         (rgp (string-match-p "rg" grep-program)))
     (setq grep-program executable)
