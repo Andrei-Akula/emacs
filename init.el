@@ -1321,13 +1321,17 @@ split."
 	      ("C-c l f" . eglot-format)
 	      ("C-c l F" . eglot-format-buffer)
 	      ;; sometimes ionide acts up
-	      ("C-c l R" . eglot-reconnect))
+	      ("C-c l R" . eglot-reconnect)
+        :map flymake-mode-map
+        ("M-n" . flymake-goto-next-error)
+        ("M-p" . flymake-goto-prev-error))
   :config
   (setq eglot-sync-connect nil)
-  (setq eglot-autoshutdown t))
+  (setq eglot-autoshutdown t)
+  (setq eglot-extend-to-xref t))
 
-(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
-(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
 
 ;; *** end of refactoring ***
