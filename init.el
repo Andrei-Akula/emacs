@@ -882,6 +882,8 @@
   (setq dired-recursive-deletes 'always)
   (setq delete-by-moving-to-trash t)
   (setq dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso")
+  (when (eq system-type 'darwin)
+    (setq dired-listing-switches "-AGFhlv"))
   ;; when two Dired buffers are open side-by-side we get the other
   ;; buffer as the default target of the current rename or copy operation
   (setq dired-dwim-target t)
@@ -922,9 +924,6 @@
   (setq dired-bind-info nil))
 
 
-
-(when (eq system-type 'darwin)
-    (setq dired-listing-switches "-AGFhlv"))
 
 ;; Visuals
 (when (display-graphic-p)
