@@ -1221,14 +1221,13 @@ split."
   :bind ("C-c g" . magit-status)
   :init
   (setq magit-define-global-key-bindings nil)
-  (setq magit-section-visibility-indicator '("⮧"))
   :config
   (setq git-commit-summary-max-length 50)
   ;; NOTE 2023-01-24: I used to also include `overlong-summary-line'
   ;; in this list, but I realised I do not need it.  My summaries are
   ;; always in check.  When I exceed the limit, it is for a good
   ;; reason.
-  (setq git-commit-style-convention-checks '(non-empty-second-line))
+  ;; (setq git-commit-style-convention-checks '(non-empty-second-line))
 
   (setq magit-diff-refine-hunk t))
 
