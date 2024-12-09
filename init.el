@@ -1344,6 +1344,17 @@ split."
   :init (setq markdown-command "multimarkdown"))
 
 
+;;;; `dictionary'
+(use-package dictionary
+  :ensure nil
+  :bind ("C-c d" . dictionary-search)
+  :config
+  (setq dictionary-server "dict.org"
+        dictionary-default-popup-strategy "lev" ; read doc string
+        dictionary-create-buttons nil
+        dictionary-use-single-buffer t))
+
+
 ;; *** end of refactoring ***
 
 
