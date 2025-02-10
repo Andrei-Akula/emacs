@@ -1263,36 +1263,108 @@ split."
 (setq-default js-indent-level 2)
 (setq-default js-switch-indent-offset 2)
 
-(use-package typescript-mode
-  :ensure t
-  :custom (typescript-indent-level 2))
 
-(use-package js2-mode
-  :if (display-graphic-p)
-  :hook (js2-mode . js2-imenu-extras-mode)
-  :hook (js-mode . js2-minor-mode)
-  :mode ("\\.js$" . js2-mode)
-  :interpreter ("node" . js2-mode)
-  :ensure t
-  :custom
-  (js2-mode-assume-strict t)
-  (js2-warn-about-unused-function-arguments t)
-  (js2-dynamic-idle-timer-adjust 5000))
+;; (use-package typescript-mode
+;;   :custom (typescript-indent-level 2))
 
-(use-package xref-js2
-  :if (display-graphic-p)
-  :ensure t
-  :hook (js2-mode . pt/js-hook)
-  :custom
-  (xref-js2-search-program 'rg)
-  :config
-  (defun pt/js-hook ()
-    (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+;; (use-package typescript-ts-mode)
+
+;; (use-package js2-mode
+;;   :if (display-graphic-p)
+;;   :hook (js2-mode . js2-imenu-extras-mode)
+;;   :hook (js-mode . js2-minor-mode)
+;;   :mode ("\\.js$" . js2-mode)
+;;   :interpreter ("node" . js2-mode)
+;;   :ensure t
+;;   :custom
+;;   (js2-mode-assume-strict t)
+;;   (js2-warn-about-unused-function-arguments t)
+;;   (js2-dynamic-idle-timer-adjust 5000))
+
+;; (use-package xref-js2
+;;   :if (display-graphic-p)
+;;   :ensure t
+;;   :hook (js2-mode . pt/js-hook)
+;;   :custom
+;;   (xref-js2-search-program 'rg)
+;;   :config
+;;   (defun pt/js-hook ()
+;;     (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
 (use-package web-mode
-  :ensure t
   :if (display-graphic-p)
   :custom (web-mode-markup-indent-offset 2))
+
+
+;;;; tree-sitter
+(use-package treesit
+      :mode (("\\.tsx\\'" . tsx-ts-mode)
+             ("\\.js\\'"  . typescript-ts-mode)
+             ("\\.mjs\\'" . typescript-ts-mode)
+             ("\\.mts\\'" . typescript-ts-mode)
+             ("\\.cjs\\'" . typescript-ts-mode)
+             ("\\.ts\\'"  . typescript-ts-mode)
+             ("\\.jsx\\'" . tsx-ts-mode)
+             ("\\.json\\'" .  json-ts-mode)
+             ("\\.Dockerfile\\'" . dockerfile-ts-mode)
+             ;; More modes defined here...
+             )
+      :preface
+      (defun os/setup-install-grammars ()
+        "Install Tree-sitter grammars if they are absent."
+        (interactive)
+        (dolist (grammar
+                 '((css . ("https://github.com/tree-sitter/tree-sitter-css"))
+                   (bash "https://github.com/tree-sitter/tree-sitter-bash")
+                   (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+                   (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
+                   (json . ("https://github.com/tree-sitter/tree-sitter-json"))
+                   (python . ("https://github.com/tree-sitter/tree-sitter-python"))
+                   (go "https://github.com/tree-sitter/tree-sitter-go")
+                   (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+                   (make "https://github.com/alemuller/tree-sitter-make")
+                   (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+                   (cmake "https://github.com/uyha/tree-sitter-cmake")
+                   (c "https://github.com/tree-sitter/tree-sitter-c")
+                   (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+                   (toml "https://github.com/tree-sitter/tree-sitter-toml")
+                   (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
+                   (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
+                   (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))
+                   ))
+          (add-to-list 'treesit-language-source-alist grammar)
+          ;; Only install `grammar' if we don't already have it
+          ;; installed. However, if you want to *update* a grammar then
+          ;; this obviously prevents that from happening.
+          (unless (treesit-language-available-p (car grammar))
+            (treesit-install-language-grammar (car grammar)))))
+
+      ;; Optional, but recommended. Tree-sitter enabled major modes are
+      ;; distinct from their ordinary counterparts.
+      ;;
+      ;; You can remap major modes with `major-mode-remap-alist'. Note
+      ;; that this does *not* extend to hooks! Make sure you migrate them
+      ;; also
+      (dolist (mapping
+               '((python-mode . python-ts-mode)
+                 (css-mode . css-ts-mode)
+                 (typescript-mode . typescript-ts-mode)
+                 (js-mode . typescript-ts-mode)
+                 (js2-mode . typescript-ts-mode)
+                 (c-mode . c-ts-mode)
+                 (c++-mode . c++-ts-mode)
+                 (c-or-c++-mode . c-or-c++-ts-mode)
+                 (bash-mode . bash-ts-mode)
+                 (css-mode . css-ts-mode)
+                 (json-mode . json-ts-mode)
+                 (js-json-mode . json-ts-mode)
+                 (sh-mode . bash-ts-mode)
+                 (sh-base-mode . bash-ts-mode)))
+        (add-to-list 'major-mode-remap-alist mapping))
+      :config
+      (os/setup-install-grammars))
+
+
 
 
 ;;;; eglot
@@ -1331,6 +1403,12 @@ split."
 ;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 ;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
+;;;; Flymake ESLint
+;; (use-package eslint-flymake
+;;   :hook ((js-mode            . eslint-flymake-setup)
+;;          (js-jsx-mode        . eslint-flymake-setup)
+;;          (typescript-ts-mode . eslint-flymake-setup)
+;;          (tsx-ts-mode        . eslint-flymake-setup)))
 
 ;;;; Markdown
 
