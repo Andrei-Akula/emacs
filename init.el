@@ -1314,12 +1314,13 @@ split."
         "Install Tree-sitter grammars if they are absent."
         (interactive)
         (dolist (grammar
-                 '((css . ("https://github.com/tree-sitter/tree-sitter-css"))
+                 '(
+                   (css "https://github.com/tree-sitter/tree-sitter-css")
                    (bash "https://github.com/tree-sitter/tree-sitter-bash")
-                   (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+                   (html "https://github.com/tree-sitter/tree-sitter-html")
                    (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
-                   (json . ("https://github.com/tree-sitter/tree-sitter-json"))
-                   (python . ("https://github.com/tree-sitter/tree-sitter-python"))
+                   (json "https://github.com/tree-sitter/tree-sitter-json")
+                   (python "https://github.com/tree-sitter/tree-sitter-python")
                    (go "https://github.com/tree-sitter/tree-sitter-go")
                    (markdown "https://github.com/ikatyang/tree-sitter-markdown")
                    (make "https://github.com/alemuller/tree-sitter-make")
@@ -1330,8 +1331,9 @@ split."
                    (toml "https://github.com/tree-sitter/tree-sitter-toml")
                    (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
                    (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
-                   (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))
-                   ))
+                   (yaml "https://github.com/ikatyang/tree-sitter-yaml")
+                   (prisma "https://github.com/victorhqc/tree-sitter-prisma"))
+                 )
           (add-to-list 'treesit-language-source-alist grammar)
           ;; Only install `grammar' if we don't already have it
           ;; installed. However, if you want to *update* a grammar then
