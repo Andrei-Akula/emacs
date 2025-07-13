@@ -22,7 +22,7 @@
                    "%b"))))
   )
 
-;; always start with the *scratch* buffer in Graphic
+;; always start with the *scratch* buffer
 (when (display-graphic-p)
   (setq initial-buffer-choice t)
   (setq initial-major-mode 'lisp-interaction-mode)
@@ -64,11 +64,18 @@
   (setq native-comp-async-report-warnings-errors 'silent) ; Emacs 28 with native compilation
   (setq native-compile-prune-cache t)) ; Emacs 29
 
+(defun pbcopy ()
+  (interactive)
+  (call-process-region (point) (mark) "pbcopy")
+  (setq deactivate-mark t))
+
 ;; MacOS
 (when (eq system-type 'darwin)
   ;; Standard macOS conventions would have s-w close the current buffer, not the whole window.
   (bind-key "s-w" #'kill-current-buffer)
   ;;(setq ns-auto-hide-menu-bar t)
+  (if (not (display-graphic-p))
+    (global-set-key (kbd "C-c c") 'pbcopy))
   )
 
 ;; MacOS
@@ -146,8 +153,13 @@
     ;; Keymap for buffers (Emacs28)
     :map ctl-x-x-map
     ("f" . follow-mode)  ; override `font-lock-update'
+    ("b". tab-line-mode)
     ("l" . visual-line-mode)))
 
+
+(when (display-graphic-p)
+  ;; display tabs in prog mode
+  (add-hook 'prog-mode-hook 'tab-line-mode))
 
 
 (when (display-graphic-p)
@@ -166,7 +178,7 @@
 ;;;; ef-themes
 (use-package ef-themes
     :ensure t
-    :if (display-graphic-p)
+    ;; :if (display-graphic-p)
     :config
     ;; Add all your customizations prior to loading the themes
     (setq ef-themes-to-toggle '(ef-light ef-owl)
@@ -178,7 +190,7 @@
     (mapc #'disable-theme custom-enabled-themes)
 
     ;; Load the theme of choice:
-    (load-theme 'ef-light :no-confirm)
+    (load-theme 'ef-owl :no-confirm)
 
     (define-key global-map (kbd "<f5>") #'ef-themes-toggle))
 
@@ -716,7 +728,6 @@
     (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)))
 
 
-
 ;;; Enhanced minibuffer commands (consult.el)
 ;;; https://github.com/minad/consult
 (use-package consult
@@ -786,6 +797,7 @@
   (setq marginalia-max-relative-age 0)) ; absolute time
 
 
+
 ;;
 ;; Isearch
 ;;
@@ -835,7 +847,7 @@
   ;; (setq grep-use-headings t) ; Emacs 30
 
   (add-to-list 'grep-find-ignored-directories "dist")
-  
+
   (let ((executable (or (executable-find "rg") "grep"))
         (rgp (string-match-p "rg" grep-program)))
     (setq grep-program executable)
@@ -868,6 +880,9 @@
   :hook (after-init . global-so-long-mode))
 
 
+
+
+
 ;;;;
 ;;;; Dired
 ;;;;
@@ -883,7 +898,8 @@
   (setq delete-by-moving-to-trash t)
   (setq dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso")
   (when (eq system-type 'darwin)
-    (setq dired-listing-switches "-AGFhlv"))
+    (setq dired-listing-switches "-AGFhlv")
+    (setq dired-use-ls-dired nil))
   ;; when two Dired buffers are open side-by-side we get the other
   ;; buffer as the default target of the current rename or copy operation
   (setq dired-dwim-target t)
@@ -922,6 +938,8 @@
   (setq dired-x-hands-off-my-keys t)    ; easier to show the keys I use
   (setq dired-bind-man nil)
   (setq dired-bind-info nil))
+
+
 
 
 
@@ -1227,7 +1245,7 @@ split."
   ;; in this list, but I realised I do not need it.  My summaries are
   ;; always in check.  When I exceed the limit, it is for a good
   ;; reason.
-  ;; (setq git-commit-style-convention-checks '(non-empty-second-line))
+  (setq git-commit-style-convention-checks '(non-empty-second-line))
 
   (setq magit-diff-refine-hunk t))
 
@@ -1253,8 +1271,6 @@ split."
   )
 
 
-
-
 ;;
 ;; Programming languages
 ;;
@@ -1262,7 +1278,6 @@ split."
 (setq-default c-basic-offset 2)
 (setq-default js-indent-level 2)
 (setq-default js-switch-indent-offset 2)
-
 
 ;; (use-package typescript-mode
 ;;   :custom (typescript-indent-level 2))
@@ -1295,6 +1310,7 @@ split."
   :if (display-graphic-p)
   :custom (web-mode-markup-indent-offset 2))
 
+
 ;;;; tree-sitter auto
 (use-package treesit-auto
   :ensure t
@@ -1319,6 +1335,7 @@ split."
 (add-to-list 'auto-mode-alist '("\\.cjs\\'" . js-ts-mode))
 
 ;;;; tree-sitter
+
 
 
 ;;;; eglot
@@ -1364,12 +1381,15 @@ split."
 ;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 ;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
+
+
 ;;;; Flymake ESLint
 ;; (use-package eslint-flymake
 ;;   :hook ((js-mode            . eslint-flymake-setup)
 ;;          (js-jsx-mode        . eslint-flymake-setup)
 ;;          (typescript-ts-mode . eslint-flymake-setup)
 ;;          (tsx-ts-mode        . eslint-flymake-setup)))
+
 
 ;;;; Markdown
 
@@ -1398,10 +1418,10 @@ split."
 
 
 
+
 ;; Never mix tabs and spaces. Never use tabs, period.
 ;; We need the setq-default here because this becomes a buffer-local variable when set.
 (setq-default indent-tabs-mode nil)
-
 
 
 ;; treatment of whitespace
@@ -1440,10 +1460,11 @@ split."
 
 
 
-
 ;; bs-show: 'a' toggles all buffers, and '+' then marks an entry to display in both views
 (require 'bs)
 (global-set-key (kbd "C-x C-b") 'bs-show)
+
+
 
 
 
@@ -1481,7 +1502,8 @@ split."
  ;; If there is more than one, they won't work right.
  '(org-agenda-files
    '("~/Org/work/epam.org" "/Users/Andrei_Akula/Org/work/work.org"))
- '(package-selected-packages '(all-the-icons-dired all-the-icons reverse-im)))
+ '(package-selected-packages
+   '(yaml-mode markdown-mode magit breadcrumb exec-path-from-shell eglot wgrep web-mode xref-js2 js2-mode typescript-mode ef-themes all-the-icons-dired all-the-icons reverse-im)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
