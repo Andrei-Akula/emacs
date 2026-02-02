@@ -104,8 +104,8 @@
   (setq next-error-recenter '(4)) ; center of the window
   (setq next-error-message-highlight t)
   (setq find-library-include-other-files nil) ; Emacs 29
-  ;; (setq remote-file-name-inhibit-delete-by-moving-to-trash t) ; Emacs 30
-  ;; (setq remote-file-name-inhibit-auto-save t)                 ; Emacs 30
+  (setq remote-file-name-inhibit-delete-by-moving-to-trash t) ; Emacs 30
+  (setq remote-file-name-inhibit-auto-save t)                 ; Emacs 30
   (setq tramp-connection-timeout (* 60 10)) ; seconds
   (setq save-interprogram-paste-before-kill t)
   (setq mode-require-final-newline t)
@@ -119,8 +119,8 @@
   (setq mark-even-if-inactive nil)
   (setq fast-but-imprecise-scrolling t)
   (setq load-prefer-newer t)
-  ;; (setq echo-keystrokes-help nil) ; Emacs 30
-  ;; (setq epa-keys-select-method 'minibuffer) ; Emacs 30
+  (setq echo-keystrokes-help nil) ; Emacs 30
+  (setq epa-keys-select-method 'minibuffer) ; Emacs 30
 
   ;; Keys I unbind here are either to avoid accidents or to bind them
   ;; elsewhere later in the configuration.
@@ -153,7 +153,7 @@
     ;; Keymap for buffers (Emacs28)
     :map ctl-x-x-map
     ("f" . follow-mode)  ; override `font-lock-update'
-    ("b". tab-line-mode)
+    ("b". tab-line-mode) ; displays a tab-like line at the top of each window
     ("l" . visual-line-mode)))
 
 
@@ -165,8 +165,15 @@
 (when (display-graphic-p)
   ;;;; Fonts
   (when (eq system-type 'darwin)
-    (set-face-attribute 'default nil :font "Menlo-12")
-    (set-face-attribute 'variable-pitch nil :font "PT Mono-12"))
+    (cond
+     ((> (display-pixel-width) 3199)
+      (set-face-attribute 'default nil :font "Menlo-14")
+      (set-face-attribute 'variable-pitch nil :font "PT Mono-14"))
+     (t
+      (set-face-attribute 'default nil :font "Menlo-12")
+      (set-face-attribute 'variable-pitch nil :font "PT Mono-12"))
+     )
+    )
 
   ;;; Font on Windows
   (when (memq system-type '(windows-nt ms-dos))
@@ -419,7 +426,7 @@
   :ensure nil
   :commands (proced)
   :config
-  ;; (setq proced-auto-update-flag 'visible) ; Emacs 30 supports more the `visible' value
+  (setq proced-auto-update-flag 'visible) ; Emacs 30 supports more the `visible' value
   (setq proced-enable-color-flag t) ; Emacs 29
   (setq proced-auto-update-interval 5)
   (setq proced-descend t)
@@ -472,7 +479,7 @@
   (setq shell-input-autoexpand 'input)
   (setq shell-highlight-undef-enable t) ; Emacs 29.1
   (setq shell-has-auto-cd nil) ; Emacs 29.1
-  ;; (setq shell-get-old-input-include-continuation-lines t) ; Emacs 30.1
+  (setq shell-get-old-input-include-continuation-lines t) ; Emacs 30.1
   (setq shell-kill-buffer-on-exit t) ; Emacs 29.1
   (setq shell-completion-fignore '("~" "#" "%"))
   (setq-default comint-scroll-to-bottom-on-input t)
@@ -844,7 +851,7 @@
   :commands (grep lgrep rgrep)
   :config
   (setq grep-save-buffers nil)
-  ;; (setq grep-use-headings t) ; Emacs 30
+  (setq grep-use-headings t) ; Emacs 30
 
   (add-to-list 'grep-find-ignored-directories "dist")
 
@@ -1307,6 +1314,7 @@ split."
 ;;     (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
 (use-package web-mode
+  :ensure t
   :if (display-graphic-p)
   :custom (web-mode-markup-indent-offset 2))
 
@@ -1337,6 +1345,10 @@ split."
 ;; (setq treesit-language-source-alist
 ;;      '((json "https://github.com/tree-sitter/tree-sitter-json")))
 
+;;;; tree-sitter
+;; Emacs 30.1 only supports ABI 13 and 14, but multiple language libraries are now at ABI 15 at
+;; head, resulting in Warning (treesit): The installed language grammar for X cannot be located or
+;; has problems (version-mismatch): 15
 
 ;;;; tree-sitter
 (use-package treesit
