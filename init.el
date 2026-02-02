@@ -1539,6 +1539,15 @@ split."
 (global-set-key (kbd "C-x C-b") 'bs-show)
 
 
+(use-package reverse-im
+  :ensure t ; install `reverse-im' using package.el
+  :demand t ; always load it
+  ;; translate these methods, use M-x `list-input-methods'
+  ;; if you're not sure which one to use
+  ;;(reverse-im-input-methods '("russian-computer"))
+  ;;:config
+  ;;(reverse-im-mode t)) ; turn the global minor mode on
+  )
 
 
 
